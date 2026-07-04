@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
@@ -27,7 +28,7 @@ class ProductController extends Controller
 
         $products = $query->orderBy('id')->paginate($perPage)->withQueryString();
 
-        return response()->json($products);
+        return ProductResource::collection($products)->response();
     }
 
     /**
@@ -35,7 +36,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): JsonResponse
     {
-        return response()->json($product);
+        return (new ProductResource($product))->response();
     }
 
     /**
@@ -45,7 +46,7 @@ class ProductController extends Controller
     {
         $product = Product::create($request->validated());
 
-        return response()->json($product, 201);
+        return (new ProductResource($product))->response()->setStatusCode(201);
     }
 
     /**
@@ -55,7 +56,7 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
 
-        return response()->json($product);
+        return (new ProductResource($product))->response();
     }
 
     /**
