@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreProductRequest;
 
 class ProductController extends Controller
 {
@@ -34,5 +35,15 @@ class ProductController extends Controller
     public function show(Product $product): JsonResponse
     {
         return response()->json($product);
+    }
+
+    /**
+     * POST /api/products
+     */
+    public function store(StoreProductRequest $request): JsonResponse
+    {
+        $product = Product::create($request->validated());
+
+        return response()->json($product, 201);
     }
 }
