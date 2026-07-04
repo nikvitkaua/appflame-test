@@ -57,4 +57,14 @@ class ProductController extends Controller
 
         return response()->json($product);
     }
+
+    /**
+     * DELETE /api/products/{id}
+     */
+    public function destroy(Product $product): JsonResponse
+    {
+        $product->delete();
+
+        return response()->json(null, 204);
+    }
 }
